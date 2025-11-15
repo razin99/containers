@@ -9,7 +9,7 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
   attestations: write
   packages: write
 
@@ -97,15 +97,22 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/coredns
+          tags: &image ghcr.io/${{ github.repository_owner }}/coredns:${{ steps.checkout.outputs.ref }}
+          context: .
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
-        with: &provenance
-          subject-name: ghcr.io/${{ github.repository_owner }}/coredns
-          subject-digest: steps.publish.outputs.digest
-          push-to-registry: true
-      - name: Generate SBOM attestation
-        uses: actions/attest-sbom@v2
         with:
-          <<: *provenance
-          sbom-path: sbom.json
+          subject-name: ghcr.io/${{ github.repository_owner }}/coredns
+          subject-digest: ${{ steps.publish.outputs.digest }}
+          push-to-registry: true
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0.20.9
+        with:
+          image: *image
+          output-file: &sbom coredns.spdx.json
+      - uses: actions/attest-sbom@v2
+        with:
+          subject-name: ghcr.io/${{ github.repository_owner }}/coredns
+          subject-digest: ${{ steps.publish.outputs.digest }}
+          push-to-registry: true
+          sbom-path: *sbom
