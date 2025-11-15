@@ -110,6 +110,7 @@ jobs:
         with:
           image: *image
           output-file: &sbom coredns.spdx.json
+          format: cyclonedx-json
       - uses: actions/attest-sbom@v2
         with:
           subject-name: ghcr.io/${{ github.repository_owner }}/coredns
