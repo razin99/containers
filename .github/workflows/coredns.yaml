@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write
+  contents: read
+  attestations: write
   packages: write
 
 jobs:
@@ -88,9 +91,21 @@ jobs:
           go-version-file: go.mod
       - name: Build binary
         run: make
-      - name: Build docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/coredns:${{ steps.checkout.outputs.ref }} .
-      - name: Built image
-        run: docker images
-      - name: Publish docker image
-        run: docker push ghcr.io/${{ github.repository_owner }}/coredns:${{ steps.checkout.outputs.ref }}
+      - uses: docker/setup-buildx-action@v3
+      - name: Docker build and push
+        id: publish
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/coredns
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with: &provenance
+          subject-name: ghcr.io/${{ github.repository_owner }}/coredns
+          subject-digest: steps.publish.outputs.digest
+          push-to-registry: true
+      - name: Generate SBOM attestation
+        uses: actions/attest-sbom@v2
+        with:
+          <<: *provenance
+          sbom-path: sbom.json
