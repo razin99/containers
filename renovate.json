@@ -2,5 +2,22 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "timezone": "Australia/Sydney",
+  "schedule": [
+    "before 10am on wednesday"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "checkout action parameter dependency",
+      "managerFilePatterns": [
+        "/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/",
+        "/(^|/)action\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "datasource=(?<datasource>\\S+)\\n\\s+repository:\\s+(?<depName>\\S+)\\n\\s+ref:\\s+(?<currentValue>[0-9a-zA-Z\\.]+)"
+      ]
+    }
   ]
 }
