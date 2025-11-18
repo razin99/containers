@@ -1,0 +1,29 @@
+dns://example.zone.com:53 {
+    errors
+    health {
+        lameduck 5s
+    }
+    ready
+    prometheus 0.0.0.0:9153
+    reload
+    loadbalance
+    etcd example.zone.com {
+        stubzones
+        path /private
+        endpoint http://dns.testing.svc.cluster.local.:2379
+    }
+    alternate original NXDOMAIN,SERVFAIL . 1.1.1.1 1.0.0.1
+}
+
+dns://.:53 {
+    errors
+    health {
+        lameduck 5s
+    }
+    ready
+    prometheus 0.0.0.0:9153
+    reload
+    loadbalance
+    cache
+    forward . 1.1.1.1 1.0.0.1
+}
