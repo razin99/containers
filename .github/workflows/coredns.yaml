@@ -5,6 +5,7 @@ on:
     types: [closed]
     paths:
       - .github/workflows/coredns.yaml
+      - coredns/
   workflow_dispatch:
 
 permissions:
@@ -16,89 +17,43 @@ permissions:
 jobs:
   docker-release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: coredns
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         id: checkout
+      - uses: actions/setup-go@v6
         with:
-          # renovate: datasource=github-releases
-          repository: coredns/coredns
-          ref: v1.13.1
+          go-version-file: coredns/go.mod
+          cache-dependency-path: coredns/go.sum
+      - name: Check file idempotency
+        run: |-
+          go generate
+          git update-index --really-refresh
+          if ! git diff-index --quiet --exit-code HEAD; then
+            echo "::error::Uncomitted contents when running \`go generate\`"
+            echo "::error::$(git status)"
+            exit 1
+          fi
+      - name: Build binary
+        run: CGO_ENABLED=0 go build -v -ldflags="-s -w -X github.com/coredns/coredns/coremain.GitCommit=$(git describe --dirty --always)"
+      - id: coredns_version
+        run: echo "value=$(go list -f '{{.Version}}' -m github.com/coredns/coredns)" >> $GITHUB_OUTPUT
       - name: Login to GitHub Container Registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
-      - name: Setup CoreDNS plugin
-        run: |
-          cat <<EOF > plugin.cfg
-          root:root
-          metadata:metadata
-          geoip:geoip
-          cancel:cancel
-          tls:tls
-          timeouts:timeouts
-          reload:reload
-          nsid:nsid
-          bufsize:bufsize
-          bind:bind
-          debug:debug
-          trace:trace
-          ready:ready
-          health:health
-          pprof:pprof
-          prometheus:metrics
-          errors:errors
-          log:log
-          dnstap:dnstap
-          local:local
-          dns64:dns64
-          acl:acl
-          any:any
-          chaos:chaos
-          loadbalance:loadbalance
-          tsig:tsig
-          cache:cache
-          rewrite:rewrite
-          header:header
-          dnssec:dnssec
-          autopath:autopath
-          minimal:minimal
-          template:template
-          transfer:transfer
-          hosts:hosts
-          route53:route53
-          azure:azure
-          clouddns:clouddns
-          k8s_external:k8s_external
-          kubernetes:kubernetes
-          file:file
-          auto:auto
-          secondary:secondary
-          alternate:github.com/coredns/alternate
-          etcd:etcd
-          loop:loop
-          forward:forward
-          grpc:grpc
-          erratic:erratic
-          whoami:whoami
-          on:github.com/coredns/caddy/onevent
-          sign:sign
-          view:view
-          EOF
-      - uses: actions/setup-go@v6
-        with:
-          go-version-file: go.mod
-      - name: Build binary
-        run: make
       - uses: docker/setup-buildx-action@v3
       - name: Docker build and push
         id: publish
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: &image ghcr.io/${{ github.repository_owner }}/coredns:${{ steps.checkout.outputs.ref }}
-          context: .
+          tags: &image ghcr.io/${{ github.repository_owner }}/coredns:${{ steps.coredns_version.outputs.value }}
+          context: ./coredns
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
