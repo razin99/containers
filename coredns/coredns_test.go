@@ -15,6 +15,7 @@ import (
 func TestCorefile(t *testing.T) {
 	dnsserver.Directives = ds.Directives
 	dnsserver.Quiet = true
+	dnsserver.Port = "5353"
 	caddy.Quiet = true
 
 	contents, err := os.ReadFile("./Corefile")
@@ -28,7 +29,7 @@ func TestCorefile(t *testing.T) {
 		Contents:       contents,
 	})
 	if err != nil {
-		t.Fail()
+		t.Error(err)
 	}
 	defer ci.Stop()
 }
@@ -36,6 +37,7 @@ func TestCorefile(t *testing.T) {
 func TestInvalidPlugin(t *testing.T) {
 	dnsserver.Directives = ds.Directives
 	dnsserver.Quiet = true
+	dnsserver.Port = "5353"
 	caddy.Quiet = true
 
 	ci, err := caddy.Start(caddy.CaddyfileInput{
@@ -45,6 +47,6 @@ func TestInvalidPlugin(t *testing.T) {
 	})
 	if err == nil {
 		defer ci.Stop()
-		t.Fail() // expect it to fail, we gave a plugin that's not installed
+		t.Errorf("Plugin whoami is not installed, expected coredns to fail")
 	}
 }

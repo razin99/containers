@@ -1,4 +1,4 @@
-dns://example.zone.com:53 {
+dns://example.zone.com {
     errors
     health {
         lameduck 5s
@@ -15,7 +15,7 @@ dns://example.zone.com:53 {
     alternate original NXDOMAIN,SERVFAIL . 1.1.1.1 1.0.0.1
 }
 
-dns://.:53 {
+dns://. {
     errors
     health {
         lameduck 5s
