@@ -2,7 +2,10 @@ name: CoreDNS
 
 on:
   pull_request:
-    types: [closed]
+    types:
+      - closed
+      - opened
+      - synchronize
     paths:
       - .github/workflows/coredns.yaml
       - coredns/
@@ -15,18 +18,22 @@ permissions:
   packages: write
 
 jobs:
-  docker-release:
-    runs-on: ubuntu-latest
-    defaults:
+  test:
+    runs-on: &runs-on ubuntu-latest
+    defaults: &defaults
       run:
         working-directory: coredns
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - &checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         id: checkout
-      - uses: actions/setup-go@v6
+      - &setup-go
+        uses: actions/setup-go@v6
         with:
           go-version-file: coredns/go.mod
           cache-dependency-path: coredns/go.sum
+      - name: Testing
+        run: pwd && go test -v
       - name: Check file idempotency
         run: |-
           go generate
@@ -36,6 +43,15 @@ jobs:
             echo "::error::$(git status)"
             exit 1
           fi
+  docker-release:
+    runs-on: *runs-on
+    defaults: *defaults
+    needs:
+      - test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - *checkout
+      - *setup-go
       - name: Build binary
         run: CGO_ENABLED=0 go build -v -ldflags="-s -w -X github.com/coredns/coredns/coremain.GitCommit=$(git describe --dirty --always)"
       - id: coredns_version
