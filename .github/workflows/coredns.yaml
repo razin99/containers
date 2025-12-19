@@ -8,7 +8,7 @@ on:
       - synchronize
     paths:
       - .github/workflows/coredns.yaml
-      - coredns/
+      - coredns/**
   workflow_dispatch:
 
 permissions:
