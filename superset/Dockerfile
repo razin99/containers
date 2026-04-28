@@ -1,6 +1,7 @@
-FROM apachesuperset.docker.scarf.sh/apache/superset:5.0.0
+ARG SUPERSET=5.0.0
+FROM apachesuperset.docker.scarf.sh/apache/superset:$SUPERSET
 USER root
-RUN . /app/.venv/bin/activate && \
-  uv pip install "psycopg2-binary==2.9.12"
+RUN uv pip install .[postgres]
+RUN uv pip install "Authlib==1.7.0"
 USER superset
 CMD ["/app/docker/entrypoints/run-server.sh"]
