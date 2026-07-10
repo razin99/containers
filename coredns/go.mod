@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/coredns/alternate v0.2.12
 	github.com/coredns/caddy v1.1.4-0.20250930002214-15135a999495
-	github.com/coredns/coredns v1.14.5
+	github.com/coredns/coredns v1.14.6
 )
 
 require (
