@@ -16,7 +16,8 @@
         "/(^|/)action\\.ya?ml$/"
       ],
       "matchStrings": [
-        "datasource=(?<datasource>\\S+)\\n\\s+repository:\\s+(?<depName>\\S+)\\n\\s+ref:\\s+(?<currentValue>[0-9a-zA-Z\\.]+)"
+        "datasource=(?<datasource>\\S+)\\n\\s+repository:\\s+(?<depName>\\S+)\\n\\s+ref:\\s+(?<currentValue>[0-9a-zA-Z\\.]+)",
+        "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n.*APP_VER:\\s+(?<currentValue>\\S+)"
       ]
     }
   ]

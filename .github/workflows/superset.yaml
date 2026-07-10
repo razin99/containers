@@ -17,6 +17,10 @@ permissions:
   attestations: write
   packages: write
 
+env:
+  # renovate: datasource=docker depName=apachesuperset.docker.scarf.sh/apache/superset
+  APP_VER: 6.1.0
+
 jobs:
   docker-release:
     runs-on: ubuntu-latest
@@ -39,8 +43,8 @@ jobs:
         with:
           push: true
           build-args: |-
-            SUPERSET=6.1.0
-          tags: &image ghcr.io/${{ github.repository_owner }}/superset:6.1.0
+            SUPERSET=${{ env.APP_VER }}
+          tags: &image ghcr.io/${{ github.repository_owner }}/superset:${{ env.APP_VER }}
           context: ./superset
       - name: Generate artifact attestation
         uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
