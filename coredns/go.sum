@@ -20,6 +20,8 @@ github.com/coredns/coredns v1.14.2 h1:L6ECLwm4Fjg7NJamtGBFDBjk/uqvCJjfgAEhrxh5zJ
 github.com/coredns/coredns v1.14.2/go.mod h1:nuO2VVHVluZ6xzPv0dhcNc2h9roH5WxXhtuQH2TkQBc=
 github.com/coredns/coredns v1.14.5 h1:1SxNotpZ+ifmsl+aGbCmEomM9og8Qma95IG5Z9vdEL0=
 github.com/coredns/coredns v1.14.5/go.mod h1:3DRApbWDxSbvRLJam9oP+lqN0N1z/wYPzgPhYfMVAMY=
+github.com/coredns/coredns v1.14.6 h1:V2g2JdCWJVqYGdX8tlBiK0iQo23Pnt8xs8gHqKyFYs8=
+github.com/coredns/coredns v1.14.6/go.mod h1:uYFaWgxTC89XCtUZ1Siu184N3+MpaDVi9GvqHDBRbCY=
 github.com/coreos/go-semver v0.3.1 h1:yi21YpKnrx1gt5R+la8n5WgS0kCrsPp33dmEyHReZr4=
 github.com/coreos/go-semver v0.3.1/go.mod h1:irMmmIw/7yzSRPWryHsK7EYSg09caPQL03VsM8rvUec=
 github.com/coreos/go-systemd/v22 v22.5.0 h1:RrqgGjYQKalulkV8NGVIfkXQf6YYmOyiJKk8iXXhfZs=
