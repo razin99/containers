@@ -1,4 +1,4 @@
-ARG SUPERSET=5.0.0
+ARG SUPERSET=6.1.0
 FROM apachesuperset.docker.scarf.sh/apache/superset:$SUPERSET
 USER root
 RUN uv pip install .[postgres]
