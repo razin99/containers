@@ -77,7 +77,7 @@ jobs:
           subject-digest: ${{ steps.publish.outputs.digest }}
           push-to-registry: true
       - name: Generate SBOM
-        uses: anchore/sbom-action@v0.20.9
+        uses: anchore/sbom-action@v0.24.2
         with:
           image: *image
           output-file: &sbom coredns.spdx.json
