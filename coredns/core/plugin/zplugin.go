@@ -4,14 +4,15 @@ package plugin
 
 import (
 	// Include all plugins.
-	_ "github.com/coredns/alternate"
 
 	_ "github.com/coredns/coredns/plugin/cache"
 	_ "github.com/coredns/coredns/plugin/errors"
 	_ "github.com/coredns/coredns/plugin/etcd"
 	_ "github.com/coredns/coredns/plugin/forward"
+	_ "github.com/coredns/coredns/plugin/header"
 	_ "github.com/coredns/coredns/plugin/health"
 	_ "github.com/coredns/coredns/plugin/loadbalance"
+	_ "github.com/coredns/coredns/plugin/log"
 	_ "github.com/coredns/coredns/plugin/metrics"
 	_ "github.com/coredns/coredns/plugin/ready"
 	_ "github.com/coredns/coredns/plugin/reload"
