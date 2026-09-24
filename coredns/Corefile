@@ -1,27 +1,21 @@
-dns://example.zone.com {
+dns://node.local {
+    log
     errors
-    health {
-        lameduck 5s
-    }
     ready
-    prometheus 0.0.0.0:9153
     reload
     loadbalance
-    etcd example.zone.com {
-        stubzones
-        path /private
-        endpoint http://dns.testing.svc.cluster.local.:2379
+    header {
+        response set ra
     }
-    alternate original NXDOMAIN,SERVFAIL . 1.1.1.1 1.0.0.1
+    etcd node.local {
+        fallthrough
+        endpoint http://127.0.0.1:2379
+    }
+    forward node.local 1.1.1.1
 }
-
 dns://. {
     errors
-    health {
-        lameduck 5s
-    }
     ready
-    prometheus 0.0.0.0:9153
     reload
     loadbalance
     cache
