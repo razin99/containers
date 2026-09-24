@@ -15,9 +15,10 @@ var Directives = []string{
 	"health",
 	"prometheus",
 	"errors",
+	"log",
 	"loadbalance",
 	"cache",
-	"alternate",
+	"header",
 	"etcd",
 	"forward",
 }
