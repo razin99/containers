@@ -17,6 +17,9 @@ permissions:
   attestations: write
   packages: write
 
+env:
+  APP_VER: 0.0.1
+
 jobs:
   docker-release:
     runs-on: ubuntu-latest
