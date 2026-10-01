@@ -47,7 +47,7 @@ jobs:
           tags: &image ghcr.io/${{ github.repository_owner }}/superset:${{ env.APP_VER }}
           context: ./superset
       - name: Generate artifact attestation
-        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-name: &subject-name ghcr.io/${{ github.repository_owner }}/superset
           subject-digest: ${{ steps.publish.outputs.digest }}
@@ -58,7 +58,7 @@ jobs:
           image: *image
           output-file: &sbom spdx.json
           format: cyclonedx-json
-      - uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-name: *subject-name
           subject-digest: ${{ steps.publish.outputs.digest }}
