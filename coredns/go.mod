@@ -1,9 +1,8 @@
 module github.com/razin99/containers/coredns
 
-go 1.25.0
+go 1.27.3
 
 require (
-	github.com/coredns/alternate v0.2.12
 	github.com/coredns/caddy v1.1.4-0.20250930002214-15135a999495
 	github.com/coredns/coredns v1.14.6
 )
@@ -25,7 +24,6 @@ require (
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
 	github.com/mdlayher/socket v0.6.0 // indirect
 	github.com/mdlayher/vsock v1.3.0 // indirect
 	github.com/miekg/dns v1.1.72 // indirect
