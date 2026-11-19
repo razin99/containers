@@ -1,4 +1,4 @@
-FROM quay.io/coreos/etcd:v3.5.15 AS etcd-source
+FROM quay.io/coreos/etcd:v3.7.4 AS etcd-source
 FROM alpine:3.24
 
 RUN apk add --no-cache \
